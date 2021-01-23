@@ -1,56 +1,51 @@
-import removeArray from '../app';
+import Validator from '../app';
 
-const character = {
-  name: 'Лучник',
-  type: 'Bowman',
-  health: 50,
-  level: 3,
-  attack: 40,
-  defence: 10,
-  special: [
-    {
-      id: 8,
-      name: 'Двойной выстрел',
-      icon: 'http://...',
-      description: 'Двойной выстрел',
-    },
-    {
-      id: 9,
-      name: 'Нокаутирующий удар',
-      icon: 'http://...',
-      // <- обратите внимание, описание "засекречено"
-    },
-  ],
-};
+test('check true', () => {
+  expect(Validator.validateUsername('abz123-_ABZ')).toBe(true);
+});
 
-test('Checking the return value', () => {
-  const received = removeArray(character);
-  expect(received).toEqual([
-    {
-      id: 8,
-      name: 'Двойной выстрел',
-      icon: 'http://...',
-      description: 'Двойной выстрел',
-    },
-    {
-      id: 9,
-      name: 'Нокаутирующий удар',
-      icon: 'http://...',
-      description: 'Описание недоступно',
-    },
-  ]);
-  expect(received).not.toBe([
-    {
-      id: 8,
-      name: 'Двойной выстрел',
-      icon: 'http://...',
-      description: 'Двойной выстрел',
-    },
-    {
-      id: 9,
-      name: 'Нокаутирующий удар',
-      icon: 'http://...',
-      description: 'Описание недоступно',
-    },
-  ]);
+test.each([
+  'a_1_a',
+  'a_12_a',
+  'a_123_a',
+])('check 123', (name) => {
+  expect(Validator.validateUsername(name)).toBe(true);
+});
+
+test.each([
+  'a_4444_a',
+  'a_55555_a',
+  'a_666666_a',
+])('4+together', (name) => {
+  expect(Validator.validateUsername(name)).toBe(false);
+});
+
+test.each([
+  '!',
+  '@',
+  '#',
+  '$',
+  '%',
+  '^',
+  '&',
+  '*',
+  '(',
+  ')',
+  '[',
+  ']',
+  '{',
+  '}',
+])('%', (name) => {
+  expect(Validator.validateUsername(name)).toBe(false);
+});
+
+test.each([
+  '1abc',
+  '-abc',
+  '_abc',
+  'abc1',
+  'abc-',
+  'abc_',
+])(' "-"  "_"', (name) => {
+  expect(Validator.validateUsername(name)).toBe(false);
 });

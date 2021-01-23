@@ -1,11 +1,6 @@
 
-// console.log('worked');
-const character = {};
-export default function removeArray() {
-  for (let i = 0; i < character.special.length; i += 1) {
-    if (character.special[i].description === undefined) {
-      character.special[i].description = 'Описание недоступно';
-    }
+export default class Validator {
+  static validateUsername(name) {
+    return /^[a-z][\w-]+[a-z]$/i.test(name) && !/\d{4,}/.test(name);
   }
-  return character.special;
 }
